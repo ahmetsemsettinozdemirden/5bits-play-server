@@ -16,7 +16,6 @@ public class Mailer {
     }
 
     public void sendEmail(String subject, String fromAddress, String toAddress, String bodyText) {
-        String cid = "1234";
         Email email = new Email()
                 .setSubject(subject)
                 .setFrom("<" + fromAddress + ">")
@@ -28,7 +27,6 @@ public class Mailer {
 
 
     public void sendToEmailList(String subject, String fromAddress, List<String> emailList, String bodyText) {
-        String cid = "1234";
         Email email = new Email()
                 .setSubject(subject)
                 .setFrom("<" + fromAddress + ">")
