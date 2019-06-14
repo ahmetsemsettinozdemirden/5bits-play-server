@@ -11,3 +11,17 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 # --- User ---
 POST    /login                      controllers.api.UserController.login()
+
+
+# --- Notification ---
++user
+GET     /get                        controllers.api.NotificationController.getAllEmailLists()
++user
+GET     /get/:id                    controllers.api.NotificationController.getEmailList(id: Long)
++user
+POST    /create-email-list          controllers.api.NotificationController.createEmailList
++user
+PUT     /edit-email-list            controllers.api.NotificationController.editEmailList
++user
+POST    /delete-email-list          controllers.api.NotificationController.deleteEmailList
+
