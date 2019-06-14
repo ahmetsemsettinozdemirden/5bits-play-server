@@ -5,15 +5,13 @@ import play.data.validation.Constraints;
 
 import java.util.List;
 
-public class EmailListForm {
+public class NotificationForm {
 
     @NotNull
     @Constraints.Required
-    public String name;
-
-    public String description;
+    public Long eventId;
 
     @NotNull
     @Constraints.Required
-    public List<String> emails;
+    public List<Long> emailListIds;
 }

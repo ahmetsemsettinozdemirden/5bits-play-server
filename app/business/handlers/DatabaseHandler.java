@@ -2,27 +2,37 @@ package business.handlers;
 
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
+import business.notification.NotificationService;
+import db.models.EmailList;
+import db.models.Events;
 import db.models.UserType;
 import db.models.WeeklyScheduleNode;
 import db.repository.UserRepository;
 import play.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class DatabaseHandler {
 
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
     private final Logger.ALogger logger = Logger.of(this.getClass());
 
     @Inject
-    public DatabaseHandler(UserRepository userRepository) {
+    public DatabaseHandler(UserRepository userRepository, NotificationService notificationService) {
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     public void start() {
         logger.info("Database Handler starting...");
         createDefaultAdmin();
         createDefaultContentManager();
+        createDefaultEmailLists();
+        createDefaultEvents();
         logger.info("Database Handler successfully completed.");
     }
 
@@ -45,6 +55,31 @@ public class DatabaseHandler {
             } catch (ClientException | ServerException e) {
                 logger.error("create default content manager error.", e);
             }
+        }
+    }
+
+    private void createDefaultEmailLists() {
+        if (EmailList.finder.all().isEmpty()) {
+            try {
+                List<String> emailList1 = Arrays.asList("elifduran", "muratkaryagdi");
+                notificationService.createEmailList("emailList1", "desc", emailList1);
+
+                List<String> emailList2 = Arrays.asList("mberkayozkan", "huseyinberkgok");
+                notificationService.createEmailList("emailList2", "desc", emailList2);
+            } catch (ClientException e) {
+                logger.error("create default email lists error.", e);
+            }
+        }
+    }
+
+    private void createDefaultEvents() {
+        if (Events.finder.all().isEmpty()) {
+
+            Events event1 = new Events("title1", "body1");
+            Events event2 = new Events("title2", "body2");
+
+            event1.save();
+            event2.save();
         }
     }
 

@@ -1,12 +1,15 @@
 package db.models;
 
+import io.ebean.Finder;
 import io.ebean.Model;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Events extends Model {
 
+    @Id
     private Long id;
 
     private String title;
@@ -17,6 +20,8 @@ public class Events extends Model {
         this.title = title;
         this.body = body;
     }
+
+    public static final Finder<Long, Events> finder = new Finder<>(Events.class);
 
     public Long getId() {
         return id;

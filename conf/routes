@@ -11,12 +11,26 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 # --- User ---
 PUT     /login                      controllers.api.UserController.login
-+ user
++user
 PUT     /logout                     controllers.api.UserController.logout
-+ user
++user
 POST    /add-content-manager        controllers.api.UserController.addContentManager
-+ user
++user
 PUT     /password                   controllers.api.UserController.updatePassword
-+ user
++user
 GET     /content-managers           controllers.api.UserController.getContentManagers
 
+
+# --- Notification ---
++user
+GET     /email-list                 controllers.api.NotificationController.getAllEmailLists
++user
+GET     /email-list/:id             controllers.api.NotificationController.getEmailList(id: Long)
++user
+POST    /email-list                 controllers.api.NotificationController.createEmailList
++user
+PUT     /email-list/:id             controllers.api.NotificationController.editEmailList(id: Long)
++user
+DELETE  /email-list/:id             controllers.api.NotificationController.deleteEmailList(id: Long)
++user
+POST    /send-notification          controllers.api.NotificationController.sendNotification
