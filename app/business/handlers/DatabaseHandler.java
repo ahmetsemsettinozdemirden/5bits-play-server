@@ -3,9 +3,7 @@ package business.handlers;
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
 import business.notification.NotificationService;
-import db.models.EmailList;
-import db.models.Events;
-import db.models.UserType;
+import db.models.*;
 import db.repository.UserRepository;
 import play.Logger;
 
@@ -32,6 +30,7 @@ public class DatabaseHandler {
         createDefaultContentManager();
         createDefaultEmailLists();
         createDefaultEvents();
+        createDefaultWeeklyScheduleNode();
         logger.info("Database Handler successfully completed.");
     }
 
@@ -74,12 +73,51 @@ public class DatabaseHandler {
     private void createDefaultEvents() {
         if (Events.finder.all().isEmpty()) {
 
-            Events event1 = new Events("title1", "body1");
-            Events event2 = new Events("title2", "body2");
-
-            event1.save();
-            event2.save();
+            new Events("title1", "body1").save();
+            new Events("title2", "body2").save();
         }
     }
 
+    private void createDefaultWeeklyScheduleNode() {
+        if (WeeklyScheduleNode.finder.query().setMaxRows(1).findOne() == null) {
+            logger.info("inserting weekly schedule nodes.");
+            List<String> sections = Arrays.asList("First Year", "Second Year", "Third Year", "Fourth Year", "Graduate");
+            List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+            List<String> hours = Arrays.asList(
+                    "08:45 - 09:30",
+                    "09:45 - 10:30",
+                    "10:45 - 11:30",
+                    "11:45 - 12:30",
+                    "13:30 - 14:15",
+                    "14:30 - 15:15",
+                    "15:30 - 16:15",
+                    "16:30 - 17:15");
+            for (String section : sections) {
+                for (String day : days) {
+                    for (String hour : hours) {
+                        new WeeklyScheduleNode(section, day, hour, null).save();
+                    }
+                }
+            }
+            logger.info("weekly schedule nodes inserted ...");
+        }
+    }
+
+    private void createDefaultCourseList() {
+        if (Course.finder.all().isEmpty()) {
+
+            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 113", "Programming Basics", "Nesli Erdoğmuş",
+                    "Büşra Güvenoğlu, Ersin Çine, Leyla Tekin, Samet Tenekeci", 3, true, true).save();
+            new Course("CENG 114", "Probability & Statistics", "Nesli Erdoğmuş",
+                    "Damla Yaşar", 3, true, false).save();
+            new Course("CENG 115", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 211", "Programming Fundamentals", "Tuğkan Tuğlular",
+                    "Deniz Kavzak Ufuktepe, Dilek Öztürk, Ekincan Ufuktepe", 3, true, false).save();
+            new Course("CENG 212", "Concepts of Programming Languages", "Selma Tekir",
+                    "Damla Yaşar, Erhan Sezer, Ozan Polatbilek", 3, false, false).save();
+        }
+    }
 }

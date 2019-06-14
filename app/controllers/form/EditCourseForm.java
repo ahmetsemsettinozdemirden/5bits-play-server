@@ -1,6 +1,8 @@
 package controllers.form;
 
-public class CourseForm {
+public class EditCourseForm {
+
+    public String codeToEdit;
 
     public String code;
 
