@@ -1,16 +1,12 @@
 package business.internal;
 
 import business.handlers.DatabaseHandler;
-import business.mail.Mailer;
-import business.scraper.WebScraper;
-import db.models.Events;
 import play.Logger;
 import play.db.ebean.EbeanConfig;
 import play.db.ebean.EbeanDynamicEvolutions;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Arrays;
 
 @Singleton
 public class ServerInitializer {
