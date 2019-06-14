@@ -1,5 +1,6 @@
 package db.models;
 
+import io.ebean.Finder;
 import io.ebean.Model;
 
 import javax.persistence.Entity;
@@ -21,6 +22,8 @@ public class EmailList extends Model {
         this.description = description;
         this.emails = emails;
     }
+
+    public static final Finder<Long, EmailList> finder = new Finder<>(EmailList.class);
 
     public Long getId() {
         return id;
@@ -51,5 +54,9 @@ public class EmailList extends Model {
     public EmailList setEmails(List<String> emails) {
         this.emails = emails;
         return this;
+    }
+
+    public EmailList findByName(String name) {
+        return EmailList.finder.query().where().eq("name", name).findOne();
     }
 }
