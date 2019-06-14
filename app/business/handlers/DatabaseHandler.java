@@ -108,17 +108,16 @@ public class DatabaseHandler {
 
             new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
                     "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
-            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+            new Course("CENG 113", "Programming Basics", "Nesli Erdoğmuş",
+                    "Büşra Güvenoğlu, Ersin Çine, Leyla Tekin, Samet Tenekeci", 3, true, true).save();
+            new Course("CENG 114", "Probability & Statistics", "Nesli Erdoğmuş",
+                    "Damla Yaşar", 3, true, false).save();
+            new Course("CENG 115", "Concepts in Computer Engineering", "Yusuf Murat Erten",
                     "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
-            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
-                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
-            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
-                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
-            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
-                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
-            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
-                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 211", "Programming Fundamentals", "Tuğkan Tuğlular",
+                    "Deniz Kavzak Ufuktepe, Dilek Öztürk, Ekincan Ufuktepe", 3, true, false).save();
+            new Course("CENG 212", "Concepts of Programming Languages", "Selma Tekir",
+                    "Damla Yaşar, Erhan Sezer, Ozan Polatbilek", 3, false, false).save();
         }
     }
-
 }
