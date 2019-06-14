@@ -28,15 +28,14 @@ public class DatabaseHandler {
     public void start() {
         logger.info("Database Handler starting...");
         createDefaultAdmin();
-        createDefaultEmailLists();
-        createDefaultEvents();
+        createDefaultContentManager();
         logger.info("Database Handler successfully completed.");
     }
 
     private void createDefaultAdmin() {
         if (userRepository.getTotalUserCount(UserType.ADMIN) == 0) {
             try {
-                userRepository.create("test@email.com", "password", UserType.ADMIN).save();
+                userRepository.create("jesus", "test@email.com", "password", UserType.ADMIN).save();
                 logger.info("test admin inserted.");
             } catch (ClientException | ServerException e) {
                 logger.error("create default admin error.", e);
@@ -47,7 +46,7 @@ public class DatabaseHandler {
     private void createDefaultContentManager() {
         if (userRepository.getTotalUserCount(UserType.CONTENT_MANAGER) == 0) {
             try {
-                userRepository.create("content@email.com", "password", UserType.CONTENT_MANAGER).save();
+                userRepository.create("jesus", "content@email.com", "password", UserType.CONTENT_MANAGER).save();
                 logger.info("test content manager inserted.");
             } catch (ClientException | ServerException e) {
                 logger.error("create default content manager error.", e);

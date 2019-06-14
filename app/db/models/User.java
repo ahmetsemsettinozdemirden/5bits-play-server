@@ -22,12 +22,14 @@ public class User extends Model {
     private Long id;
 
     @NotNull
+    private String name;
+
+    @NotNull
     private String email;
 
     @NotNull
     private String password;
 
-    @NotNull
     private String token;
 
     @NotNull
@@ -41,7 +43,8 @@ public class User extends Model {
 
     public static final Finder<Long, User> finder = new Finder<>(User.class);
 
-    public User(String email, String password, String token, UserType type) {
+    public User(String name, String email, String password, String token, UserType type) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.token = token;
@@ -50,6 +53,15 @@ public class User extends Model {
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public User setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public String getEmail() {
