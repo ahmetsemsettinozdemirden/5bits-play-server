@@ -1,47 +1,55 @@
 package db.models;
-import io.ebean.annotation.NotNull;
-import play.libs.mailer.Email;
 
+import io.ebean.Model;
+
+import javax.persistence.Entity;
 import java.util.List;
 
-public class EmailList {
+@Entity
+public class EmailList extends Model {
 
-    @NotNull
+    private Long id;
+
     private String name;
 
-    @NotNull
     private String description;
 
-    @NotNull
-    private List<Email> emailList;
+    private List<String> emails;
 
-    public EmailList(String name, String description, List<Email> emailList) {
+    public EmailList(String name, String description, List<String> emails) {
         this.name = name;
         this.description = description;
-        this.emailList = emailList;
+        this.emails = emails;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public EmailList setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public EmailList setDescription(String description) {
         this.description = description;
+        return this;
     }
 
-    public List<Email> getEmailList() {
-        return emailList;
+    public List<String> getEmails() {
+        return emails;
     }
 
-    public void setEmailList(List<Email> emailList) {
-        this.emailList = emailList;
+    public EmailList setEmails(List<String> emails) {
+        this.emails = emails;
+        return this;
     }
 }

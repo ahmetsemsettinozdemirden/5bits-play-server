@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Table(name="usr")
 @Index(columnNames = { "type" })
 public class User extends Model {
-
+    //Test
     @Id
     private Long id;
 
