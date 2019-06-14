@@ -23,6 +23,10 @@ public class UserRepository {
         return User.finder.all();
     }
 
+    public List<User> getAllContentManagers() {
+        return User.finder.query().where().eq("type", UserType.CONTENT_MANAGER).findList();
+    }
+
     public User get(Long id) {
         return User.finder.byId(id);
     }
@@ -35,7 +39,7 @@ public class UserRepository {
                 .findOne();
     }
 
-    public User create(String email, String password, UserType type)
+    public User create(String name, String email, String password, UserType type)
             throws ClientException, ServerException {
 
         if (email == null || email.equals(""))
@@ -44,12 +48,15 @@ public class UserRepository {
         if (password == null || password.equals(""))
             throw new ClientException("invalidPassword", "Password can not be null or empty.");
 
+        if (name == null || name.equals(""))
+            throw new ClientException("invalidPassword", "Password can not be null or empty.");
+
         User existedUser = get(email);
 
         if (existedUser != null)
             throw new ClientException("emailExists", "Email already exists. Please use a different email.");
 
-        User user = new User(email, password, null, type);
+        User user = new User(name, email, password, null, type);
         try {
             userHelper.refreshToken(user);
         } catch (UnsupportedEncodingException e) {
