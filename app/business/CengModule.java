@@ -38,6 +38,7 @@ public class CengModule {
                 "16:30 - 17:15");
 
         StringBuilder html = new StringBuilder();
+        int nodeCounter = 0;
         for (String section : sections) {
             StringBuilder table = new StringBuilder("<table class=wp-block-table><tbody>");
             table.append("<tr>" + section +
@@ -51,10 +52,10 @@ public class CengModule {
                 for (String hour : hours) {
                     table.append("<tr>");
                     table.append("<td><strong>" + hour + "</strong></td>\"");
-                    WeeklyScheduleNode aNode = weeklySchedule.stream().filter(node ->
+                    WeeklyScheduleNode aNode = weeklySchedule.get(nodeCounter); /*weeklySchedule.stream().filter(node ->
                             node.getSection().equals(section) &&
                                     node.getDay().equals(day) &&
-                                    node.getHour().equals(hour)).findAny().orElse(null);
+                                    node.getHour().equals(hour)).findAny().orElse(null);*/
                     if (aNode.getCourses().isEmpty()){
                         table.append("<td>&nbsp;</td>");
                     }
@@ -64,6 +65,7 @@ public class CengModule {
                             table.append(course + "</br>");
                         table.append("</td>");
                     }
+                    nodeCounter++;
                 }
             }
             table.append("</tbody></table>");

@@ -3,10 +3,7 @@ package business.handlers;
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
 import business.notification.NotificationService;
-import db.models.EmailList;
-import db.models.Events;
-import db.models.UserType;
-import db.models.WeeklyScheduleNode;
+import db.models.*;
 import db.repository.UserRepository;
 import play.Logger;
 
@@ -75,11 +72,8 @@ public class DatabaseHandler {
     private void createDefaultEvents() {
         if (Events.finder.all().isEmpty()) {
 
-            Events event1 = new Events("title1", "body1");
-            Events event2 = new Events("title2", "body2");
-
-            event1.save();
-            event2.save();
+            new Events("title1", "body1").save();
+            new Events("title2", "body2").save();
         }
     }
 
@@ -103,6 +97,24 @@ public class DatabaseHandler {
                     }
                 }
             }
+        }
+    }
+
+    private void createDefaultCourseList() {
+        if (Course.finder.all().isEmpty()) {
+
+            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
         }
     }
 
