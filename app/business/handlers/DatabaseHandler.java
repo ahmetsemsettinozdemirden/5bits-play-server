@@ -27,10 +27,21 @@ public class DatabaseHandler {
     private void createDefaultAdmin() {
         if (userRepository.getTotalUserCount(UserType.ADMIN) == 0) {
             try {
-                userRepository.create("test@email.com", "password", UserType.ADMIN);
+                userRepository.create("test@email.com", "password", UserType.ADMIN).save();
                 logger.info("test admin inserted.");
             } catch (ClientException | ServerException e) {
                 logger.error("create default admin error.", e);
+            }
+        }
+    }
+
+    private void createDefaultContentManager() {
+        if (userRepository.getTotalUserCount(UserType.CONTENT_MANAGER) == 0) {
+            try {
+                userRepository.create("content@email.com", "password", UserType.CONTENT_MANAGER).save();
+                logger.info("test content manager inserted.");
+            } catch (ClientException | ServerException e) {
+                logger.error("create default content manager error.", e);
             }
         }
     }
