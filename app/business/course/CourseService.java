@@ -68,8 +68,9 @@ public class CourseService {
         course.delete();
     }
 
-    public WeeklyScheduleNode updateWeeklyScheduleNode(String section, String day, String hour, List<Course> courses) throws ClientException {
-        for (Course course : courses) {
+    public WeeklyScheduleNode updateWeeklyScheduleNode(String section, String day, String hour, List<String> courses) throws ClientException {
+        for (String code : courses) {
+            Course course = getCourse(code);
             if (!course.getStatus()) {
                 throw new ClientException("courseNotOffered", course.getCode() + " course is not offered.");
             }

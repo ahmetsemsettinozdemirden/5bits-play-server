@@ -15,6 +15,8 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import java.util.List;
+
 public class CourseController extends Controller {
 
     private FormFactory formFactory;
@@ -109,6 +111,10 @@ public class CourseController extends Controller {
             return badRequest(e.getMessage());
         }
         return ok(Json.toJson(weeklyScheduleNode));
+    }
+
+    public Result getAllWeeklySchedule() {
+        return ok(Json.toJson(courseService.getAllWeeklySchedule()));
     }
 
 }

@@ -30,6 +30,7 @@ public class DatabaseHandler {
         createDefaultContentManager();
         createDefaultEmailLists();
         createDefaultEvents();
+        createDefaultWeeklyScheduleNode();
         logger.info("Database Handler successfully completed.");
     }
 
@@ -79,6 +80,7 @@ public class DatabaseHandler {
 
     private void createDefaultWeeklyScheduleNode() {
         if (WeeklyScheduleNode.finder.query().setMaxRows(1).findOne() == null) {
+            logger.info("inserting weekly schedule nodes.");
             List<String> sections = Arrays.asList("First Year", "Second Year", "Third Year", "Fourth Year", "Graduate");
             List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
             List<String> hours = Arrays.asList(
@@ -97,6 +99,7 @@ public class DatabaseHandler {
                     }
                 }
             }
+            logger.info("weekly schedule nodes inserted ...");
         }
     }
 
