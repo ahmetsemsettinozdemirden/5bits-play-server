@@ -27,11 +27,10 @@ public class UserRepository {
         return User.finder.byId(id);
     }
 
-    public User get(String email, UserType type) {
+    public User get(String email) {
         return User.finder.query()
                 .where()
                 .eq("email", email)
-                .eq("type", type)
                 .setMaxRows(1)
                 .findOne();
     }
@@ -45,7 +44,7 @@ public class UserRepository {
         if (password == null || password.equals(""))
             throw new ClientException("invalidPassword", "Password can not be null or empty.");
 
-        User existedUser = get(email, type);
+        User existedUser = get(email);
 
         if (existedUser != null)
             throw new ClientException("emailExists", "Email already exists. Please use a different email.");

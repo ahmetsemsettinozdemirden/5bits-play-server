@@ -19,12 +19,12 @@ public class UserService {
         this.userHelper = userHelper;
     }
 
-    public User signIn(String email, String password, UserType type) throws ClientException, ServerException {
+    public User signIn(String email, String password) throws ClientException, ServerException {
 
-        User user = userRepository.get(email, type);
+        User user = userRepository.get(email);
 
         if (user == null)
-            throw new ClientException("userCouldNotFound", "User account couldn't found with email: '" + email + "' and type: '" + type.getValue() + "'.");
+            throw new ClientException("userCouldNotFound", "User account couldn't found with email: '" + email + "'.");
 
         if (!user.getPassword().equals(password))
             throw new ClientException("passwordDoesNotMatch", "Password does not match!");
@@ -36,6 +36,17 @@ public class UserService {
             throw new ServerException("refreshTokenError", e);
         }
 
+        return user;
+    }
+
+    public User signOut(User user) throws ClientException, ServerException {
+
+        try {
+            user.setToken(null);
+            user.save();
+        } catch (Exception e) {
+            throw new ServerException("removeTokenError", e);
+        }
         return user;
     }
 

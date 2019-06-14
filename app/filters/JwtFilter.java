@@ -8,6 +8,7 @@ import business.jwt.VerifiedJwt;
 import db.models.User;
 import db.models.UserType;
 import db.repository.UserRepository;
+import play.Logger;
 import play.libs.F;
 import play.mvc.Filter;
 import play.mvc.Http;
@@ -30,6 +31,7 @@ public class JwtFilter extends Filter {
     private static final String ERR_ROUTE_NOT_FOUND = "ERR_ROUTE_NOT_FOUND";
     private static final String ERR_USER_NOT_FOUND = "ERR_USER_NOT_FOUND";
     private static final String ERR_TOKEN_MISMATCH = "ERR_TOKEN_MISMATCH";
+    private static final String ERR_LOGIN_REQUIRED = "ERR_LOGIN_REQUIRED";
 
     private final UserRepository userRepository;
     private final JwtValidator jwtValidator;
@@ -52,8 +54,7 @@ public class JwtFilter extends Filter {
 
         Optional<String> authHeader = requestHeader.getHeaders().get(HEADER_AUTHORIZATION);
 
-        if (authHeader.filter(ah -> ah.contains(BEARER)).isPresent()) {
-
+        if (authHeader.filter(ah -> ah.contains(BEARER)).isPresent() && !requestHeader.path().equals("/login")) {
             String token = authHeader.map(ah -> ah.replace(BEARER, "")).orElse("");
             F.Either<JwtValidator.Error, VerifiedJwt> res = jwtValidator.verify(token);
 
@@ -63,10 +64,13 @@ public class JwtFilter extends Filter {
 
             VerifiedJwt verifiedJwt = res.right.get();
 
-            User user = userRepository.get(verifiedJwt.getUsername(), UserType.ADMIN);
+            User user = userRepository.get(verifiedJwt.getUsername());
 
             if (user == null)
                 return errorHandler.onClientErrorCompletionStage(requestHeader, BAD_REQUEST, "ERR_USER_NOT_FOUND", ERR_USER_NOT_FOUND);
+
+            if (user.getToken() == null )
+                return errorHandler.onClientErrorCompletionStage(requestHeader, BAD_REQUEST, "ERR_LOGIN_REQUIRED", ERR_LOGIN_REQUIRED);
 
             if (!user.getToken().equals(token))
                 return errorHandler.onClientErrorCompletionStage(requestHeader, BAD_REQUEST, "ERR_TOKEN_MISMATCH", ERR_TOKEN_MISMATCH);

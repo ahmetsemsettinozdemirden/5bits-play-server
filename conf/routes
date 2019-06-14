@@ -10,4 +10,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 
 # --- User ---
-POST    /login                      controllers.api.UserController.login()
+POST    /login                      controllers.api.UserController.login
++ user
+POST    /logout                     controllers.api.UserController.logout
