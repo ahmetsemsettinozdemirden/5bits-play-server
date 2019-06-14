@@ -36,8 +36,8 @@ public class ServerInitializer {
             // fix database state
             databaseHandler.start();
             logger.info("Server successfully initialized.");
-            Events event = new Events("hi", "hello");
-            mailer.sendEmail(Arrays.asList("muratkaryagdi@std.iyte.edu.tr", "elifduran@std.iyte.edu.tr"), event);
+            //Events event = new Events("hi", "hello");
+            //mailer.sendEmail(Arrays.asList("muratkaryagdi@std.iyte.edu.tr", "elifduran@std.iyte.edu.tr"), event);
         } catch (Exception e) {
             logger.error("server couldn't initialized!", e);
         }

@@ -19,9 +19,7 @@ public class Mailer {
     public void sendEmail(List<String> emailList, Events event) {
         Email email = new Email()
                 .setSubject(event.getTitle())
-                .setFrom("5BitsViewer <elifduran@iyte.edu.tr>")
-                .addTo(null)
-                .addAttachment("", null)
+                .setFrom("5BitsViewer <elifduran@std.iyte.edu.tr>")
                 .setBodyText(event.getBody());
 
         for (String address: emailList) {
