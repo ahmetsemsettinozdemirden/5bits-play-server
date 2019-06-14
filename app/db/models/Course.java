@@ -1,5 +1,6 @@
 package db.models;
 
+import io.ebean.Finder;
 import io.ebean.Model;
 
 import javax.persistence.Entity;
@@ -23,16 +24,18 @@ public class Course extends Model {
 
     private Boolean status;
 
-    private Boolean labratory;
+    private Boolean laboratory;
 
-    public Course(String code, String name, String instructors, String assistants, Integer credit, Boolean status, Boolean labratory) {
+    public static final Finder<Long, Course> finder = new Finder<>(Course.class);
+
+    public Course(String code, String name, String instructors, String assistants, Integer credit, Boolean status, Boolean laboratory) {
         this.code = code;
         this.name = name;
         this.instructors = instructors;
         this.assistants = assistants;
         this.credit = credit;
         this.status = status;
-        this.labratory = labratory;
+        this.laboratory = laboratory;
     }
 
     public Long getId() {
@@ -93,12 +96,12 @@ public class Course extends Model {
         return this;
     }
 
-    public Boolean getLabratory() {
-        return labratory;
+    public Boolean getLaboratory() {
+        return laboratory;
     }
 
-    public Course setLabratory(Boolean labratory) {
-        this.labratory = labratory;
+    public Course setLaboratory(Boolean laboratory) {
+        this.laboratory = laboratory;
         return this;
     }
 }

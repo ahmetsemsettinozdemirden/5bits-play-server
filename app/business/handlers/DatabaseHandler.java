@@ -3,6 +3,7 @@ package business.handlers;
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
 import db.models.UserType;
+import db.models.WeeklyScheduleNode;
 import db.repository.UserRepository;
 import play.Logger;
 
@@ -44,6 +45,12 @@ public class DatabaseHandler {
             } catch (ClientException | ServerException e) {
                 logger.error("create default content manager error.", e);
             }
+        }
+    }
+
+    private void createDefaultWeeklyScheduleNode() {
+        if (WeeklyScheduleNode.finder.query().setMaxRows(1).findOne() == null) {
+
         }
     }
 
