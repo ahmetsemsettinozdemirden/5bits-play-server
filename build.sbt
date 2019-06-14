@@ -16,3 +16,5 @@ libraryDependencies += jdbc
 libraryDependencies += "com.auth0" % "java-jwt" % "3.3.0"
 libraryDependencies += "org.mindrot" % "jbcrypt" % "0.3m"
 libraryDependencies += "org.mindrot" % "jbcrypt" % "0.3m"
+libraryDependencies += "com.typesafe.play" %% "play-mailer" % "6.0.1"
+libraryDependencies += "com.typesafe.play" %% "play-mailer-guice" % "6.0.1"
