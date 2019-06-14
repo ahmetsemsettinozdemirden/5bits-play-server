@@ -2,12 +2,14 @@ package business.internal;
 
 import business.handlers.DatabaseHandler;
 import business.mail.Mailer;
+import db.models.Events;
 import play.Logger;
 import play.db.ebean.EbeanConfig;
 import play.db.ebean.EbeanDynamicEvolutions;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
 
 @Singleton
 public class ServerInitializer {
@@ -34,7 +36,8 @@ public class ServerInitializer {
             // fix database state
             databaseHandler.start();
             logger.info("Server successfully initialized.");
-            mailer.sendEmail("mail", "elifduran@std.iyte.edu.tr", "muratkaryagdi@std.iyte.edu.tr", "hi");
+            Events event = new Events("hi", "hello");
+            mailer.sendEmail(Arrays.asList("muratkaryagdi@std.iyte.edu.tr", "elifduran@std.iyte.edu.tr"), event);
         } catch (Exception e) {
             logger.error("server couldn't initialized!", e);
         }

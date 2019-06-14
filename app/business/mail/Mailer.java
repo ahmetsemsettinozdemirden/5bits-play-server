@@ -1,5 +1,6 @@
 package business.mail;
 
+import db.models.Events;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
 import javax.inject.Inject;
@@ -15,24 +16,13 @@ public class Mailer {
         this.mailerClient = mailerClient;
     }
 
-    public void sendEmail(String subject, String fromAddress, String toAddress, String bodyText) {
+    public void sendEmail(List<String> emailList, Events event) {
         Email email = new Email()
-                .setSubject(subject)
-                .setFrom("<" + fromAddress + ">")
-                .addTo("<" + toAddress + ">")
-                .addAttachment("", null)
-                .setBodyText(bodyText);
-        mailerClient.send(email);
-    }
-
-
-    public void sendToEmailList(String subject, String fromAddress, List<String> emailList, String bodyText) {
-        Email email = new Email()
-                .setSubject(subject)
-                .setFrom("<" + fromAddress + ">")
+                .setSubject(event.getTitle())
+                .setFrom("5BitsViewer <elifduran@iyte.edu.tr>")
                 .addTo(null)
                 .addAttachment("", null)
-                .setBodyText(bodyText);
+                .setBodyText(event.getBody());
 
         for (String address: emailList) {
             email.addTo("<" + address + ">");
