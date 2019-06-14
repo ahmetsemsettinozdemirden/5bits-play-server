@@ -1,5 +1,6 @@
 package db.models;
 
+import io.ebean.Finder;
 import io.ebean.Model;
 
 import javax.persistence.Entity;
@@ -19,6 +20,8 @@ public class WeeklyScheduleNode extends Model {
     private String hour;
 
     private List<Course> courses;
+
+    public static final Finder<Long, WeeklyScheduleNode> finder = new Finder<>(WeeklyScheduleNode.class);
 
     public WeeklyScheduleNode(String section, String day, String hour, List<Course> courses) {
         this.section = section;
