@@ -23,6 +23,6 @@ POST    /email-list                 controllers.api.NotificationController.creat
 +user
 PUT     /email-list                 controllers.api.NotificationController.editEmailList(id: Long)
 +user
-DELETE  /email-list                 controllers.api.NotificationController.deleteEmailList
+DELETE  /email-list                 controllers.api.NotificationController.deleteEmailList(id: Long)
 +user
 POST    /send-notification          controllers.api.NotificationController.sendNotification
