@@ -21,7 +21,7 @@ GET     /email-list/:id             controllers.api.NotificationController.getEm
 +user
 POST    /email-list                 controllers.api.NotificationController.createEmailList
 +user
-PUT     /email-list                 controllers.api.NotificationController.editEmailList
+PUT     /email-list                 controllers.api.NotificationController.editEmailList()
 +user
 DELETE  /email-list                 controllers.api.NotificationController.deleteEmailList
 +user
