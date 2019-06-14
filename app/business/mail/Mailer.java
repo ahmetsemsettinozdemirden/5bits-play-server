@@ -3,6 +3,7 @@ package business.mail;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
 import javax.inject.Inject;
+import java.util.List;
 
 
 public class Mailer {
@@ -25,5 +26,21 @@ public class Mailer {
         mailerClient.send(email);
     }
 
+
+    public void sendToEmailList(String subject, String fromAddress, List<String> emailList, String bodyText) {
+        String cid = "1234";
+        Email email = new Email()
+                .setSubject(subject)
+                .setFrom("<" + fromAddress + ">")
+                .addTo(null)
+                .addAttachment("", null)
+                .setBodyText(bodyText);
+
+        for (String address: emailList) {
+            email.addTo("<" + address + ">");
+        }
+
+        mailerClient.send(email);
+    }
 }
 
