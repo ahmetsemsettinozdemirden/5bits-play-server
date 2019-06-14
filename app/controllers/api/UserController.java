@@ -3,12 +3,14 @@ package controllers.api;
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
 import business.jwt.JwtAttrs;
+import business.mail.Mailer;
 import business.user.UserHelper;
 import business.user.UserService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import controllers.form.PasswordForm;
 import controllers.form.UserForm;
+import db.models.Events;
 import db.models.User;
 import db.models.UserType;
 import play.data.Form;
@@ -19,18 +21,21 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class UserController extends Controller {
 
     private FormFactory formFactory;
     private UserHelper userHelper;
     private UserService userService;
+    private Mailer mailer;
 
     @Inject
-    public UserController(FormFactory formFactory, UserHelper userHelper, UserService userService) {
+    public UserController(FormFactory formFactory, UserHelper userHelper, UserService userService, Mailer mailer) {
         this.formFactory = formFactory;
         this.userHelper = userHelper;
         this.userService = userService;
+        this.mailer = mailer;
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -86,11 +91,15 @@ public class UserController extends Controller {
         UserForm body = form.get();
         try {
             userService.createUser(body.name, body.email, body.password, UserType.CONTENT_MANAGER);
+            Events event = new Events("Assigned as a new content manager.", "Password: " + body.password);
+            event.save();
+            mailer.sendEmail(Arrays.asList(body.email), event);
         } catch (ClientException e) {
             return badRequest(e.getMessage());
         } catch (ServerException e) {
             return internalServerError(e.getMessage());
         }
+
         return ok();
     }
 
