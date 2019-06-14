@@ -50,3 +50,5 @@ GET     /course/:code               controllers.api.CourseController.getCourse(c
 DELETE  /course/:code               controllers.api.CourseController.deleteCourse(code: String)
 +user
 PUT     /weekly-schedule-node       controllers.api.CourseController.updateWeeklyScheduleNode
++user
+GET     /weekly-schedule-node       controllers.api.CourseController.getAllWeeklySchedule
