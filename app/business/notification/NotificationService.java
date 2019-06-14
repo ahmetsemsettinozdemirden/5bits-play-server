@@ -32,6 +32,11 @@ public class NotificationService {
         if (emails == null) {
             throw new ClientException("emailListCanNotBeEmpty", "Email list can not be empty!");
         }
+
+        if (emailList.findByName(name) != null) {
+            throw new ClientException("emailListNameIsAlreadyExists", "Email list's name is already exists.");
+        }
+
         EmailList emailList = new EmailList(name, description, emails);
         emailList.save();
         return emailList;
@@ -49,11 +54,13 @@ public class NotificationService {
             throw new ClientException("emailListCanNotBeEmpty", "Email list can not be empty!");
         }
 
-        EmailList emailByName = emailList.findByName(name);
-        if (emailByName != null) {
+        if (emailList.findByName(name) != null) {
             throw new ClientException("emailListNameIsAlreadyExists", "Email list's name is already exists.");
         }
 
+        email.setName(name);
+        email.setDescription(description);
+        email.setEmails(emails);
         email.save();
         return email;
     }
@@ -84,7 +91,7 @@ public class NotificationService {
         for (Long id: emailListIds) {
             EmailList emailList = EmailList.finder.byId(id);
             if (emailList == null) {
-                throw new ClientException("emailListCouldNotFound", "Email lists can not be empty!");
+                throw new ClientException("emailListCouldNotFound", "There is no email list by this id.");
             }
             mailer.sendEmail(emailList.getEmails(), event);
 

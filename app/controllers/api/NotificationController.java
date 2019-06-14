@@ -52,11 +52,7 @@ public class NotificationController extends Controller {
             return badRequest(e.getMessage());
         }
 
-        ObjectNode result = Json.newObject();
-        result.put("name", emailList.getName());
-        result.put("description", emailList.getDescription());
-        result.put("emailList", emailList.getEmails().toString());
-        return ok(result);
+        return ok(Json.toJson(emailList));
     }
 
     @BodyParser.Of(BodyParser.Json.class)

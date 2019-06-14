@@ -4,10 +4,12 @@ import io.ebean.Finder;
 import io.ebean.Model;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Events extends Model {
 
+    @Id
     private Long id;
 
     private String title;

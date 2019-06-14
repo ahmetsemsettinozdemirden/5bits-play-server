@@ -10,6 +10,7 @@ import db.repository.UserRepository;
 import play.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class DatabaseHandler {
         logger.info("Database Handler starting...");
         createDefaultAdmin();
         createDefaultContentManager();
+        createDefaultEmailLists();
+        createDefaultEvents();
         logger.info("Database Handler successfully completed.");
     }
 
@@ -60,7 +63,7 @@ public class DatabaseHandler {
                 List<String> emailList1 = Arrays.asList("elifduran", "muratkaryagdi");
                 notificationService.createEmailList("emailList1", "desc", emailList1);
 
-                List<String> emailList2 = Arrays.asList("huseyinberkgok", "mustafaberkayozkan");
+                List<String> emailList2 = Arrays.asList("mberkayozkan", "huseyinberkgok");
                 notificationService.createEmailList("emailList2", "desc", emailList2);
             } catch (ClientException e) {
                 logger.error("create default email lists error.", e);
