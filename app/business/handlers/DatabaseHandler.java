@@ -85,7 +85,24 @@ public class DatabaseHandler {
 
     private void createDefaultWeeklyScheduleNode() {
         if (WeeklyScheduleNode.finder.query().setMaxRows(1).findOne() == null) {
-
+            List<String> sections = Arrays.asList("First Year", "Second Year", "Third Year", "Fourth Year", "Graduate");
+            List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+            List<String> hours = Arrays.asList(
+                    "08:45 - 09:30",
+                    "09:45 - 10:30",
+                    "10:45 - 11:30",
+                    "11:45 - 12:30",
+                    "13:30 - 14:15",
+                    "14:30 - 15:15",
+                    "15:30 - 16:15",
+                    "16:30 - 17:15");
+            for (String section : sections) {
+                for (String day : days) {
+                    for (String hour : hours) {
+                        new WeeklyScheduleNode(section, day, hour, null).save();
+                    }
+                }
+            }
         }
     }
 
