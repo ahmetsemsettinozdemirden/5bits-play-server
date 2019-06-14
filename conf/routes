@@ -15,7 +15,7 @@ POST    /login                      controllers.api.UserController.login()
 
 # --- Notification ---
 +user
-GET     /email-list                 controllers.api.NotificationController.getAllEmailLists()
+GET     /email-list                 controllers.api.NotificationController.getAllEmailLists
 +user
 GET     /email-list/:id             controllers.api.NotificationController.getEmailList(id: Long)
 +user
@@ -24,4 +24,5 @@ POST    /email-list                 controllers.api.NotificationController.creat
 PUT     /email-list                 controllers.api.NotificationController.editEmailList
 +user
 DELETE  /email-list                 controllers.api.NotificationController.deleteEmailList
-
++user
+POST    /send-notification          controllers.api.NotificationController.sendNotification
