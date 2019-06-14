@@ -1,6 +1,5 @@
 package controllers.form;
 
-import db.models.Course;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class WeeklyScheduleForm {
 
     public String hour;
 
-    public List<Course> courses;
+    public List<String> courses;
 
     public WeeklyScheduleForm() {
         this.courses = new ArrayList<>();

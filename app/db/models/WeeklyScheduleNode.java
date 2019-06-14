@@ -2,6 +2,7 @@ package db.models;
 
 import io.ebean.Finder;
 import io.ebean.Model;
+import io.ebean.annotation.DbArray;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,11 +20,12 @@ public class WeeklyScheduleNode extends Model {
 
     private String hour;
 
-    private List<Course> courses;
+    @DbArray
+    private List<String> courses;
 
     public static final Finder<Long, WeeklyScheduleNode> finder = new Finder<>(WeeklyScheduleNode.class);
 
-    public WeeklyScheduleNode(String section, String day, String hour, List<Course> courses) {
+    public WeeklyScheduleNode(String section, String day, String hour, List<String> courses) {
         this.section = section;
         this.day = day;
         this.hour = hour;
@@ -61,11 +63,11 @@ public class WeeklyScheduleNode extends Model {
         return this;
     }
 
-    public List<Course> getCourses() {
+    public List<String> getCourses() {
         return courses;
     }
 
-    public WeeklyScheduleNode setCourses(List<Course> courses) {
+    public WeeklyScheduleNode setCourses(List<String> courses) {
         this.courses = courses;
         return this;
     }

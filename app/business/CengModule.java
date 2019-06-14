@@ -60,7 +60,7 @@ public class CengModule {
                     }
                     else{
                         table.append("<td>");
-                        for(Course course : aNode.getCourses())
+                        for(String course : aNode.getCourses())
                             table.append(course + "</br>");
                         table.append("</td>");
                     }

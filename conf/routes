@@ -34,3 +34,19 @@ PUT     /email-list/:id             controllers.api.NotificationController.editE
 DELETE  /email-list/:id             controllers.api.NotificationController.deleteEmailList(id: Long)
 +user
 POST    /send-notification          controllers.api.NotificationController.sendNotification
+
+# --- Course ---
++user
+POST    /course/add                 controllers.api.CourseController.addCourse
++user
+PUT     /course/edit                controllers.api.CourseController.editCourse
++user
+GET     /course                     controllers.api.CourseController.getAllCourses
++user
+GET     /course/offered             controllers.api.CourseController.getOfferedCourses
++user
+GET     /course/:code               controllers.api.CourseController.getCourse(code: String)
++user
+DELETE  /course/:code               controllers.api.CourseController.deleteCourse(code: String)
++user
+PUT     /weekly-schedule-node       controllers.api.CourseController.updateWeeklyScheduleNode
