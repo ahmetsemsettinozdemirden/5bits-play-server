@@ -3,6 +3,7 @@ package db.models;
 import io.ebean.Finder;
 import io.ebean.Model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -14,6 +15,7 @@ public class Events extends Model {
 
     private String title;
 
+    @Column(length = 2048)
     private String body;
 
     public Events(String title, String body) {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.form.EmailListForm;
 import controllers.form.NotificationForm;
 import db.models.EmailList;
+import db.models.Events;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -14,6 +15,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.List;
 
 public class NotificationController extends Controller {
@@ -85,9 +87,19 @@ public class NotificationController extends Controller {
         return ok(Json.toJson(emailList));
     }
 
-    //TODO
     public Result getEvents() {
-        return null;
+
+        List<Events> events;
+        try {
+            events = notfService.getEvents();
+        } catch (ClientException e) {
+            return badRequest(e.getMessage());
+        } catch (IOException e) {
+            return badRequest(e.getMessage());
+        }
+
+        return ok(Json.toJson(events));
+
     }
 
     @BodyParser.Of(BodyParser.Json.class)

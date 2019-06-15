@@ -2,21 +2,26 @@ package business.notification;
 
 import business.exceptions.ClientException;
 import business.mail.Mailer;
+import business.scraper.WebScraper;
 import db.models.EmailList;
 import db.models.Events;
 
 import javax.inject.Inject;
+import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 public class NotificationService {
 
     private Mailer mailer;
     private EmailList emailList;
+    private WebScraper webScraper;
 
     @Inject
-    public NotificationService(Mailer mailer, EmailList emailList) {
+    public NotificationService(Mailer mailer, EmailList emailList, WebScraper webScraper) {
         this.mailer = mailer;
         this.emailList = emailList;
+        this.webScraper = webScraper;
     }
 
     public List<EmailList> getAllEmailLists() {
@@ -76,9 +81,22 @@ public class NotificationService {
         return emailList;
     }
 
-    //TODO
-    public List<Events> getEvents() {
-        return null;
+
+    public List<Events> getEvents() throws IOException, ClientException {
+
+        List<Events> eventsList = webScraper.scrapeTopic();
+
+        for (Events event: eventsList) {
+            event.save();
+        }
+
+        List<Events> events = Events.finder.all();
+
+        if (events.isEmpty()) {
+            throw new ClientException("eventCouldNotFound", "There is no event.");
+        }
+
+        return events;
     }
 
     public void sendNotification(Long eventId, List<Long> emailListIds) throws ClientException {

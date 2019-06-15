@@ -33,6 +33,8 @@ PUT     /email-list/:id             controllers.api.NotificationController.editE
 +user
 DELETE  /email-list/:id             controllers.api.NotificationController.deleteEmailList(id: Long)
 +user
+GET     /events                     controllers.api.NotificationController.getEvents
++user
 POST    /send-notification          controllers.api.NotificationController.sendNotification
 
 # --- Course ---
