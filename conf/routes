@@ -16,6 +16,8 @@ PUT     /logout                     controllers.api.UserController.logout
 +user
 POST    /add-content-manager        controllers.api.UserController.addContentManager
 +user
+DELETE  /remove-content-manager     controllers.api.UserController.removeContentManager
++user
 PUT     /password                   controllers.api.UserController.updatePassword
 +user
 GET     /content-managers           controllers.api.UserController.getContentManagers

@@ -8,6 +8,7 @@ import business.user.UserHelper;
 import business.user.UserService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
+import controllers.form.ContentManagerForm;
 import controllers.form.PasswordForm;
 import controllers.form.UserForm;
 import db.models.Events;
@@ -99,6 +100,35 @@ public class UserController extends Controller {
         } catch (ServerException e) {
             return internalServerError(e.getMessage());
         }
+
+        return ok();
+    }
+
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result removeContentManager() {
+
+        User user = request().attrs().get(JwtAttrs.VERIFIED_USER);
+
+        if (!user.getType().equals(UserType.ADMIN)) {
+            return badRequest("Only admin can add content manager");
+        }
+
+        Form<ContentManagerForm> form = formFactory.form(ContentManagerForm.class).bind(request().body().asJson());
+
+        if(form.hasErrors())
+            return badRequest(form.errorsAsJson());
+
+        ContentManagerForm body = form.get();
+
+        User contentManager = User.finder.query().where()
+                .eq("email", body.email)
+                .eq("type", UserType.CONTENT_MANAGER)
+                .findOne();
+        if (contentManager == null) {
+            return badRequest("there is no content manager by this email");
+        }
+        
+        contentManager.delete();
 
         return ok();
     }
