@@ -1,5 +1,6 @@
 package business.handlers;
 
+import business.course.CourseService;
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
 import business.notification.NotificationService;
@@ -16,12 +17,14 @@ public class DatabaseHandler {
 
     private final UserRepository userRepository;
     private final NotificationService notificationService;
+    private final CourseService courseService;
     private final Logger.ALogger logger = Logger.of(this.getClass());
 
     @Inject
-    public DatabaseHandler(UserRepository userRepository, NotificationService notificationService) {
+    public DatabaseHandler(UserRepository userRepository, NotificationService notificationService, CourseService courseService) {
         this.userRepository = userRepository;
         this.notificationService = notificationService;
+        this.courseService = courseService;
     }
 
     public void start() {
@@ -31,6 +34,8 @@ public class DatabaseHandler {
         createDefaultEmailLists();
         createDefaultEvents();
         createDefaultWeeklyScheduleNode();
+        createDefaultCourseList();
+        updateDefaultWeeklyScheduleNode();
         logger.info("Database Handler successfully completed.");
     }
 
@@ -93,8 +98,8 @@ public class DatabaseHandler {
                     "15:30 - 16:15",
                     "16:30 - 17:15");
             for (String section : sections) {
-                for (String day : days) {
-                    for (String hour : hours) {
+                for (String hour : hours) {
+                    for (String day : days) {
                         new WeeklyScheduleNode(section, day, hour, null).save();
                     }
                 }
@@ -105,19 +110,37 @@ public class DatabaseHandler {
 
     private void createDefaultCourseList() {
         if (Course.finder.all().isEmpty()) {
+            try {
+                courseService.addCourse("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                        "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+                courseService.addCourse("CENG 113", "Programming Basics", "Nesli Erdoğmuş",
+                        "Büşra Güvenoğlu, Ersin Çine, Leyla Tekin, Samet Tenekeci", 3, true, true).save();
+                courseService.addCourse("CENG 114", "Probability & Statistics", "Nesli Erdoğmuş",
+                        "Damla Yaşar", 3, true, false).save();
+                courseService.addCourse("CENG 115", "Concepts in Computer Engineering", "Yusuf Murat Erten",
+                        "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
+                courseService.addCourse("CENG 211", "Programming Fundamentals", "Tuğkan Tuğlular",
+                        "Deniz Kavzak Ufuktepe, Dilek Öztürk, Ekincan Ufuktepe", 3, true, false).save();
+                courseService.addCourse("CENG 212", "Concepts of Programming Languages", "Selma Tekir",
+                        "Damla Yaşar, Erhan Sezer, Ozan Polatbilek", 3, false, false).save();
+            } catch (ClientException e) {
+                logger.error("create default course list error.", e);
+            }
+        }
+    }
 
-            new Course("CENG 111", "Concepts in Computer Engineering", "Yusuf Murat Erten",
-                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
-            new Course("CENG 113", "Programming Basics", "Nesli Erdoğmuş",
-                    "Büşra Güvenoğlu, Ersin Çine, Leyla Tekin, Samet Tenekeci", 3, true, true).save();
-            new Course("CENG 114", "Probability & Statistics", "Nesli Erdoğmuş",
-                    "Damla Yaşar", 3, true, false).save();
-            new Course("CENG 115", "Concepts in Computer Engineering", "Yusuf Murat Erten",
-                    "Didem Genç, Orhan Bayraktar, Samet Tenekeci", 3, true, false).save();
-            new Course("CENG 211", "Programming Fundamentals", "Tuğkan Tuğlular",
-                    "Deniz Kavzak Ufuktepe, Dilek Öztürk, Ekincan Ufuktepe", 3, true, false).save();
-            new Course("CENG 212", "Concepts of Programming Languages", "Selma Tekir",
-                    "Damla Yaşar, Erhan Sezer, Ozan Polatbilek", 3, false, false).save();
+    private void updateDefaultWeeklyScheduleNode() {
+        try {
+            courseService.updateWeeklyScheduleNode("First Year", "Monday", "08:45 - 09:30", Arrays.asList("CENG 111"));
+            courseService.updateWeeklyScheduleNode("First Year", "Monday", "09:45 - 10:30", Arrays.asList("CENG 111"));
+            courseService.updateWeeklyScheduleNode("First Year", "Monday", "10:45 - 11:30", Arrays.asList("CENG 111"));
+            courseService.updateWeeklyScheduleNode("First Year", "Tuesday", "08:45 - 09:30", Arrays.asList("CENG 113"));
+            courseService.updateWeeklyScheduleNode("First Year", "Tuesday", "09:45 - 10:30", Arrays.asList("CENG 113"));
+            courseService.updateWeeklyScheduleNode("First Year", "Tuesday", "10:45 - 11:30", Arrays.asList("CENG 113"));
+
+        }
+        catch (ClientException e) {
+            logger.error("update default weekly schedule node error.", e);
         }
     }
 }

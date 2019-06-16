@@ -41,22 +41,23 @@ public class CengModule {
         int nodeCounter = 0;
         for (String section : sections) {
             StringBuilder table = new StringBuilder("<table class=wp-block-table><tbody>");
-            table.append("<tr>" + section +
-                    "<td><strong>Monday</strong></td>\n" +
-                    "<td><strong>Tuesday</strong></td>\n" +
-                    "<td><strong>Wednesday</strong></td>\n" +
-                    "<td><strong>Thursday</strong></td>\n" +
-                    "<td><strong>Friday</strong></td>\n" +
+            table.append("<tr><td>" + section + "</td>"+
+                    "<td><strong>Monday</strong></td>" +
+                    "<td><strong>Tuesday</strong></td>" +
+                    "<td><strong>Wednesday</strong></td>" +
+                    "<td><strong>Thursday</strong></td>" +
+                    "<td><strong>Friday</strong></td>" +
                     "</tr>" );
-            for (String day : days) {
-                for (String hour : hours) {
-                    table.append("<tr>");
-                    table.append("<td><strong>" + hour + "</strong></td>\"");
+            for (String hour : hours) {
+                table.append("<tr>");
+                table.append("<td><strong>" + hour + "</strong></td>");
+                for (String day : days) {
                     WeeklyScheduleNode aNode = weeklySchedule.get(nodeCounter); /*weeklySchedule.stream().filter(node ->
                             node.getSection().equals(section) &&
                                     node.getDay().equals(day) &&
                                     node.getHour().equals(hour)).findAny().orElse(null);*/
-                    if (aNode.getCourses().isEmpty()){
+
+                    if (aNode.getCourses() == null){
                         table.append("<td>&nbsp;</td>");
                     }
                     else{
@@ -67,10 +68,12 @@ public class CengModule {
                     }
                     nodeCounter++;
                 }
+                table.append("</tr>");
             }
             table.append("</tbody></table>");
             html.append(table);
         }
+        System.out.println(html.toString());
         return html.toString();
     }
 }
