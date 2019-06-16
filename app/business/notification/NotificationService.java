@@ -87,11 +87,11 @@ public class NotificationService {
         List<Events> eventsList = webScraper.scrapeTopic();
 
         for (Events event: eventsList) {
-            event.save();
+            if (Events.finder.query().where().eq("title", event.getTitle()).findCount() == 0)
+                event.save();
         }
 
         List<Events> events = Events.finder.all();
-
         if (events.isEmpty()) {
             throw new ClientException("eventCouldNotFound", "There is no event.");
         }
