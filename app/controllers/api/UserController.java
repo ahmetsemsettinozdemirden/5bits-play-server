@@ -21,7 +21,6 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 public class UserController extends Controller {
@@ -110,7 +109,7 @@ public class UserController extends Controller {
         User user = request().attrs().get(JwtAttrs.VERIFIED_USER);
 
         if (!user.getType().equals(UserType.ADMIN)) {
-            return badRequest("Only admin can add content manager");
+            return badRequest("Only admin can remove content manager");
         }
 
         Form<ContentManagerForm> form = formFactory.form(ContentManagerForm.class).bind(request().body().asJson());

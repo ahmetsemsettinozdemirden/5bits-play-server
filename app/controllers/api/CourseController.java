@@ -1,12 +1,17 @@
 package controllers.api;
 
+import business.CengModule;
 import business.course.CourseService;
 import business.exceptions.ClientException;
+import business.exceptions.ServerException;
+import business.jwt.JwtAttrs;
 import com.google.inject.Inject;
 import controllers.form.AddCourseForm;
 import controllers.form.EditCourseForm;
 import controllers.form.WeeklyScheduleForm;
 import db.models.Course;
+import db.models.User;
+import db.models.UserType;
 import db.models.WeeklyScheduleNode;
 import play.data.Form;
 import play.data.FormFactory;
@@ -15,17 +20,17 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import java.util.List;
-
 public class CourseController extends Controller {
 
     private FormFactory formFactory;
     private CourseService courseService;
+    private CengModule cengModule;
 
     @Inject
-    public CourseController(FormFactory formFactory, CourseService courseService) {
+    public CourseController(FormFactory formFactory, CourseService courseService, CengModule cengModule) {
         this.formFactory = formFactory;
         this.courseService = courseService;
+        this.cengModule = cengModule;
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -115,6 +120,22 @@ public class CourseController extends Controller {
 
     public Result getAllWeeklySchedule() {
         return ok(Json.toJson(courseService.getAllWeeklySchedule()));
+    }
+
+    public Result publishWeeklySchedules() {
+
+        User user = request().attrs().get(JwtAttrs.VERIFIED_USER);
+
+        if (!user.getType().equals(UserType.ADMIN)) {
+            return badRequest("Only admin can remove content manager");
+        }
+
+        try {
+            cengModule.publishWeeklySchedules();
+        } catch (ServerException e) {
+            return internalServerError(e.getMessage());
+        }
+        return ok();
     }
 
 }

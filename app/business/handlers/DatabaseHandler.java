@@ -4,7 +4,11 @@ import business.course.CourseService;
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
 import business.notification.NotificationService;
-import db.models.*;
+import db.models.Course;
+import db.models.EmailList;
+import db.models.Events;
+import db.models.UserType;
+import db.models.WeeklyScheduleNode;
 import db.repository.UserRepository;
 import play.Logger;
 

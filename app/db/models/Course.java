@@ -26,6 +26,10 @@ public class Course extends Model {
 
     private Boolean laboratory;
 
+    private Boolean edited;
+
+    private Integer wordPressId;
+
     public static final Finder<Long, Course> finder = new Finder<>(Course.class);
 
     public Course(String code, String name, String instructors, String assistants, Integer credit, Boolean status, Boolean laboratory) {
@@ -36,6 +40,7 @@ public class Course extends Model {
         this.credit = credit;
         this.status = status;
         this.laboratory = laboratory;
+        this.edited = true;
     }
 
     public Long getId() {
@@ -102,6 +107,24 @@ public class Course extends Model {
 
     public Course setLaboratory(Boolean laboratory) {
         this.laboratory = laboratory;
+        return this;
+    }
+
+    public Boolean getEdited() {
+        return edited;
+    }
+
+    public Course setEdited(Boolean edited) {
+        this.edited = edited;
+        return this;
+    }
+
+    public Integer getWordPressId() {
+        return wordPressId;
+    }
+
+    public Course setWordPressId(Integer wordPressId) {
+        this.wordPressId = wordPressId;
         return this;
     }
 }

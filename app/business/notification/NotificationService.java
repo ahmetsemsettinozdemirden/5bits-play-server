@@ -7,7 +7,6 @@ import db.models.EmailList;
 import db.models.Events;
 
 import javax.inject.Inject;
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 

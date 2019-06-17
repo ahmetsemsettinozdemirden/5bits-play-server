@@ -4,7 +4,6 @@ import business.exceptions.ClientException;
 import db.models.Course;
 import db.models.WeeklyScheduleNode;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CourseService {

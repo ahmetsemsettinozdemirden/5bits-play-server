@@ -2,7 +2,6 @@ package controllers.api;
 
 import business.exceptions.ClientException;
 import business.notification.NotificationService;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.form.EmailListForm;
 import controllers.form.NotificationForm;
 import db.models.EmailList;

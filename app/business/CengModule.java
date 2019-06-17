@@ -1,19 +1,16 @@
 package business;
 
 import akka.stream.javadsl.Source;
-import play.Logger;
-import play.libs.ws.WSResponse;
-import play.mvc.Http.MultipartFormData.*;
 import business.course.CourseService;
+import business.exceptions.ServerException;
 import db.models.Course;
 import db.models.WeeklyScheduleNode;
-import play.libs.ws.WSRequest;
+import play.Logger;
+import play.libs.Json;
 import play.libs.ws.WSClient;
-import play.mvc.Http;
-import play.shaded.ahc.io.netty.util.concurrent.CompleteFuture;
+import play.mvc.Http.MultipartFormData.DataPart;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,6 +19,8 @@ public class CengModule {
 
     private CourseService courseService;
     private WSClient wsClient;
+    private final String worldPressUrl = "https://public-api.wordpress.com/wp/v2/sites/ceng316group5bits.wordpress.com/pages/";
+    private final String worldPressToken = "Bearer wVxCS6Q6a&X8HSRO#a$6@a!43tInrywWr92Oa%*wEKFKxpPCpBB77Mvfmr6gFPTb";
 
     @Inject
     public CengModule(CourseService courseService, WSClient wsClient) {
@@ -85,31 +84,58 @@ public class CengModule {
             table.append("</tbody></table>");
             html.append(table);
         }
-        System.out.println(html.toString());
         return html.toString();
     }
 
-    public void pulicWeeklySchedule() {
-        int page_id = 11;
+    private String createCourseHtml(Course course) {
 
+        return "<p><strong>" + course.getName() + "</strong></p>" +
+                "<p><strong>Instructors:</strong></p>" +
+                "<ul>" +
+                "<li>" + course.getInstructors() + "</li>" +
+                "</ul>" +
+                "<p><strong>Assistants:" + course.getAssistants() + "</strong></p>" +
+                "<p><strong>Status:</strong> " + (course.getStatus() ? "Offered" : "Pending") + "</p>";
+    }
+
+    private void sendEditCourseRequest(Course course) throws ExecutionException, InterruptedException {
+        String body = wsClient.url(worldPressUrl + course.getWordPressId())
+                .addHeader("Authorization", worldPressToken)
+                .post(Source.from(Arrays.asList(new DataPart("content", createCourseHtml(course)),
+                        new DataPart("status", "publish"),
+                        new DataPart("title", course.getCode()),
+                        new DataPart("slug", ""))))
+                .toCompletableFuture()
+                .get().getBody();
+
+        course.setWordPressId(Json.parse(body).get("id").asInt());
+        course.setEdited(false);
+        course.save();
+    }
+
+    public void publishWeeklySchedules() throws ServerException {
         try {
-            String body = wsClient.url("https://public-api.wordpress.com/wp/v2/sites/ceng316group5bits.wordpress.com/pages/16")
-                    .addHeader("Authorization", "Bearer wVxCS6Q6a&X8HSRO#a$6@a!43tInrywWr92Oa%*wEKFKxpPCpBB77Mvfmr6gFPTb")
-
+            String body = wsClient.url(worldPressUrl + "16")
+                    .addHeader("Authorization", worldPressToken)
                     .post(Source.from(Arrays.asList(new DataPart("content", createTable()),
                                                     new DataPart("status", "publish"),
-                                                    new DataPart("title", "weekly course schedules"),
+                                                    new DataPart("title", "Weekly Course Schedules"),
                                                     new DataPart("slug", ""))))
                     .toCompletableFuture()
                     .get().getBody();
             Logger.error(body);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new ServerException("wordPressError", e);
         }
 
-        Logger.error(createTable());
-
+        for (Course course : courseService.getAllCourses()) {
+            if (course.getEdited()) {
+                try {
+                    sendEditCourseRequest(course);
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new ServerException("wordPressError", e);
+                }
+            }
+        }
     }
 }
