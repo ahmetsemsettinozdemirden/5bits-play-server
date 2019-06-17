@@ -87,6 +87,23 @@ public class CengModule {
         return html.toString();
     }
 
+    private String courseCodeToUrlCode(String code) {
+        return code.substring(0,4).toLowerCase() + "-" + code.substring(4, code.length());
+    }
+
+    private String createCoursesHtml() {
+        StringBuilder pages = new StringBuilder();
+        pages.append("<ul>");
+
+        for (Course course : courseService.getAllCourses()) {
+            pages.append("<li><a href=\"https://ceng316group5bits.wordpress.com/" +
+                    courseCodeToUrlCode(course.getCode()) + "/\">" + course.getCode() + "</a></li>");
+        }
+
+        pages.append("</ul>");
+        return pages.toString();
+    }
+
     private String createCourseHtml(Course course) {
 
         return "<p><strong>" + course.getName() + "</strong></p>" +
@@ -117,9 +134,19 @@ public class CengModule {
         course.save();
     }
 
+    private void sendDeleteCourseRequest(Course course) throws ExecutionException, InterruptedException {
+        String url = worldPressUrl + course.getWordPressId();
+        wsClient.url(url)
+                .addHeader("Authorization", worldPressToken)
+                .delete()
+                .toCompletableFuture()
+                .get().getBody();
+        course.delete();
+    }
+
     public void publishWeeklySchedules() throws ServerException {
         try {
-            String body = wsClient.url(worldPressUrl + "16")
+            String body = wsClient.url(worldPressUrl + "16") // 16 is id of weekly schedules page
                     .addHeader("Authorization", worldPressToken)
                     .post(Source.from(Arrays.asList(new DataPart("content", createTable()),
                                                     new DataPart("status", "publish"),
@@ -133,13 +160,29 @@ public class CengModule {
         }
 
         for (Course course : courseService.getAllCourses()) {
-            if (course.getEdited()) {
-                try {
+            try {
+                if (course.getDeleted()) {
+                    sendDeleteCourseRequest(course);
+                } else if (course.getEdited()) {
                     sendEditCourseRequest(course);
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new ServerException("wordPressError", e);
                 }
+            } catch (InterruptedException | ExecutionException e) {
+                throw new ServerException("wordPressError", e);
             }
+        }
+
+        try {
+            String body = wsClient.url(worldPressUrl + "18") // 18 is id of courses page
+                    .addHeader("Authorization", worldPressToken)
+                    .post(Source.from(Arrays.asList(new DataPart("content", createCoursesHtml()),
+                            new DataPart("status", "publish"),
+                            new DataPart("title", "Courses"),
+                            new DataPart("slug", ""))))
+                    .toCompletableFuture()
+                    .get().getBody();
+            Logger.error(body);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new ServerException("wordPressError", e);
         }
     }
 }

@@ -14,10 +14,13 @@ public class CourseService {
 
     public Course addCourse(String code, String name, String instructors, String assistants, Integer credit, Boolean status,
                             Boolean laboratory) throws ClientException {
-        if (Course.finder.query().where().eq("code", code).findOne() != null) {
+        Course oldCourse = Course.finder.query().where().eq("code", code).findOne();
+        if (oldCourse != null && !oldCourse.getDeleted()) {
             throw new ClientException("courseExist", "This course already created.");
+        } else if (oldCourse != null && oldCourse.getDeleted()) {
+            return editCourse(code, code,  name, instructors, assistants, credit, status, laboratory);
         }
-        Course course = new Course(code, name, instructors, assistants, credit, status, laboratory);
+        Course course = new Course(code, name, instructors, assistants, credit, status, laboratory, true, false, null);
         course.save();
         return course;
     }
@@ -39,16 +42,25 @@ public class CourseService {
         course.setCredit(credit);
         course.setStatus(status);
         course.setLaboratory(laboratory);
+        course.setEdited(true);
+        course.setDeleted(false);
         course.save();
         return course;
     }
 
     public List<Course> getAllCourses() {
-        return Course.finder.all();
+        return Course.finder.query()
+                .where()
+                .eq("deleted", false)
+                .findList();
     }
 
     public List<Course> getOfferedCourses() {
-        return Course.finder.query().where().eq("status", true).findList();
+        return Course.finder.query()
+                .where()
+                .eq("status", true)
+                .eq("deleted", false)
+                .findList();
     }
 
     public Course getCourse(String code) throws ClientException {
@@ -64,7 +76,15 @@ public class CourseService {
         if (course == null) {
             throw new ClientException("courseNotExist", "There is no course by this code.");
         }
-        course.delete();
+        if (course.getDeleted()) {
+            throw new ClientException("courseAlreadyDeleted", "This course is already deleted.");
+        }
+        if (course.getWordPressId() == null) {
+            course.delete();
+        } else {
+            course.setDeleted(true);
+            course.save();
+        }
     }
 
     public WeeklyScheduleNode updateWeeklyScheduleNode(String section, String day, String hour, List<String> courses) throws ClientException {

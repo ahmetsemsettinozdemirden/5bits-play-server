@@ -28,11 +28,13 @@ public class Course extends Model {
 
     private Boolean edited;
 
+    private Boolean deleted;
+
     private Integer wordPressId;
 
     public static final Finder<Long, Course> finder = new Finder<>(Course.class);
 
-    public Course(String code, String name, String instructors, String assistants, Integer credit, Boolean status, Boolean laboratory) {
+    public Course(String code, String name, String instructors, String assistants, Integer credit, Boolean status, Boolean laboratory, Boolean edited, Boolean deleted, Integer wordPressId) {
         this.code = code;
         this.name = name;
         this.instructors = instructors;
@@ -40,7 +42,9 @@ public class Course extends Model {
         this.credit = credit;
         this.status = status;
         this.laboratory = laboratory;
-        this.edited = true;
+        this.edited = edited;
+        this.deleted = deleted;
+        this.wordPressId = wordPressId;
     }
 
     public Long getId() {
@@ -116,6 +120,15 @@ public class Course extends Model {
 
     public Course setEdited(Boolean edited) {
         this.edited = edited;
+        return this;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public Course setDeleted(Boolean deleted) {
+        this.deleted = deleted;
         return this;
     }
 
