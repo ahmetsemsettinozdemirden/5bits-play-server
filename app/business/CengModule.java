@@ -99,7 +99,11 @@ public class CengModule {
     }
 
     private void sendEditCourseRequest(Course course) throws ExecutionException, InterruptedException {
-        String body = wsClient.url(worldPressUrl + course.getWordPressId())
+        String url = worldPressUrl + course.getWordPressId();
+        if (course.getWordPressId() == null) {
+            url = worldPressUrl;
+        }
+        String body = wsClient.url(url)
                 .addHeader("Authorization", worldPressToken)
                 .post(Source.from(Arrays.asList(new DataPart("content", createCourseHtml(course)),
                         new DataPart("status", "publish"),
