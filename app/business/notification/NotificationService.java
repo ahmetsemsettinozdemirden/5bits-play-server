@@ -14,13 +14,11 @@ import java.util.List;
 public class NotificationService {
 
     private Mailer mailer;
-    private EmailList emailList;
     private WebScraper webScraper;
 
     @Inject
-    public NotificationService(Mailer mailer, EmailList emailList, WebScraper webScraper) {
+    public NotificationService(Mailer mailer, WebScraper webScraper) {
         this.mailer = mailer;
-        this.emailList = emailList;
         this.webScraper = webScraper;
     }
 
