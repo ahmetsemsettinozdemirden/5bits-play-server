@@ -130,8 +130,9 @@ public class NotificationController extends Controller {
     }
 
     private Result validateEmails(EmailListForm emailListForm) {
+        emailListForm.emails.removeIf(""::equals);
         for (String email : emailListForm.emails) {
-            if (!email.contains("@")) {
+            if (email.equals("") && !email.contains("@")) {
                 return badRequest("invalid eMail: " + email);
             }
         }
