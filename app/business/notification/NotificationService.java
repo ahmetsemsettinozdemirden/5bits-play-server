@@ -1,6 +1,7 @@
 package business.notification;
 
 import business.exceptions.ClientException;
+import business.exceptions.ServerException;
 import business.mail.Mailer;
 import business.scraper.WebScraper;
 import db.models.EmailList;
@@ -37,7 +38,7 @@ public class NotificationService {
             throw new ClientException("emailListCanNotBeEmpty", "Email list can not be empty!");
         }
 
-        if (emailList.findByName(name) != null) {
+        if (EmailList.findByName(name) != null) {
             throw new ClientException("emailListNameIsAlreadyExists", "Email list's name is already exists.");
         }
 
@@ -58,7 +59,8 @@ public class NotificationService {
             throw new ClientException("emailListCanNotBeEmpty", "Email list can not be empty!");
         }
 
-        if (emailList.findByName(name) != null) {
+        EmailList emailList = EmailList.findByName(name);
+        if (emailList != null && !emailList.getId().equals(email.getId())) {
             throw new ClientException("emailListNameIsAlreadyExists", "Email list's name is already exists.");
         }
 
@@ -98,7 +100,7 @@ public class NotificationService {
         return events;
     }
 
-    public void sendNotification(Long eventId, List<Long> emailListIds) throws ClientException {
+    public void sendNotification(Long eventId, List<Long> emailListIds) throws ClientException, ServerException {
         Events event = Events.finder.byId(eventId);
 
         if (event == null) {

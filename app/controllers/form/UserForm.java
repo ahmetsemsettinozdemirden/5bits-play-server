@@ -7,6 +7,7 @@ public class UserForm {
     public String name;
 
     @Constraints.Required
+    @Constraints.Email
     public String email;
 
     @Constraints.Required

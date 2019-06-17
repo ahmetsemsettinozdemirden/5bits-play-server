@@ -62,7 +62,7 @@ public class EmailList extends Model {
         return this;
     }
 
-    public EmailList findByName(String name) {
+    public static EmailList findByName(String name) {
         return EmailList.finder.query().where().eq("name", name).findOne();
     }
 }

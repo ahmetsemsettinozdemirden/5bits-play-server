@@ -1,6 +1,7 @@
 package controllers.api;
 
 import business.exceptions.ClientException;
+import business.exceptions.ServerException;
 import business.notification.NotificationService;
 import controllers.form.EmailListForm;
 import controllers.form.NotificationForm;
@@ -46,6 +47,10 @@ public class NotificationController extends Controller {
             return badRequest(form.errorsAsJson());
 
         EmailListForm body = form.get();
+        Result result = validateEmails(body);
+        if (result != null) {
+            return result;
+        }
         EmailList emailList;
         try {
             emailList = notfService.createEmailList(body.name, body.description, body.emails);
@@ -64,6 +69,10 @@ public class NotificationController extends Controller {
             return badRequest(form.errorsAsJson());
 
         EmailListForm body = form.get();
+        Result result = validateEmails(body);
+        if (result != null) {
+            return result;
+        }
         EmailList emailList;
         try {
             emailList = notfService.editEmailList(id, body.name, body.description, body.emails);
@@ -113,9 +122,20 @@ public class NotificationController extends Controller {
             notfService.sendNotification(body.eventId, body.emailListIds);
         } catch (ClientException e) {
             return badRequest(e.getMessage());
+        } catch (ServerException e) {
+            return internalServerError(e.getMessage());
         }
 
         return ok();
+    }
+
+    private Result validateEmails(EmailListForm emailListForm) {
+        for (String email : emailListForm.emails) {
+            if (!email.contains("@")) {
+                return badRequest("invalid eMail: " + email);
+            }
+        }
+        return null;
     }
 
 }
