@@ -68,10 +68,10 @@ public class DatabaseHandler {
     private void createDefaultEmailLists() {
         if (EmailList.finder.all().isEmpty()) {
             try {
-                List<String> emailList1 = Arrays.asList("elifduran", "muratkaryagdi");
+                List<String> emailList1 = Arrays.asList("elifduran@email.com", "muratkaryagdi@email.com");
                 notificationService.createEmailList("emailList1", "desc", emailList1);
 
-                List<String> emailList2 = Arrays.asList("mberkayozkan", "huseyinberkgok");
+                List<String> emailList2 = Arrays.asList("mberkayozkan@email.com", "huseyinberkgok@email.com");
                 notificationService.createEmailList("emailList2", "desc", emailList2);
             } catch (ClientException e) {
                 logger.error("create default email lists error.", e);
