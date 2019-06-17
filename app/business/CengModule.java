@@ -1,20 +1,32 @@
 package business;
 
+import akka.stream.javadsl.Source;
+import play.Logger;
+import play.libs.ws.WSResponse;
+import play.mvc.Http.MultipartFormData.*;
 import business.course.CourseService;
 import db.models.Course;
 import db.models.WeeklyScheduleNode;
+import play.libs.ws.WSRequest;
+import play.libs.ws.WSClient;
+import play.mvc.Http;
+import play.shaded.ahc.io.netty.util.concurrent.CompleteFuture;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class CengModule {
 
     private CourseService courseService;
+    private WSClient wsClient;
 
     @Inject
-    public CengModule(CourseService courseService) {
+    public CengModule(CourseService courseService, WSClient wsClient) {
         this.courseService = courseService;
+        this.wsClient = wsClient;
     }
 
     public String createTable() {
@@ -75,5 +87,29 @@ public class CengModule {
         }
         System.out.println(html.toString());
         return html.toString();
+    }
+
+    public void pulicWeeklySchedule() {
+        int page_id = 11;
+
+        try {
+            String body = wsClient.url("https://public-api.wordpress.com/wp/v2/sites/ceng316group5bits.wordpress.com/pages/16")
+                    .addHeader("Authorization", "Bearer wVxCS6Q6a&X8HSRO#a$6@a!43tInrywWr92Oa%*wEKFKxpPCpBB77Mvfmr6gFPTb")
+
+                    .post(Source.from(Arrays.asList(new DataPart("content", createTable()),
+                                                    new DataPart("status", "publish"),
+                                                    new DataPart("title", "weekly course schedules"),
+                                                    new DataPart("slug", ""))))
+                    .toCompletableFuture()
+                    .get().getBody();
+            Logger.error(body);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Logger.error(createTable());
+
     }
 }

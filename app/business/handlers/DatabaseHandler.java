@@ -100,7 +100,7 @@ public class DatabaseHandler {
             for (String section : sections) {
                 for (String hour : hours) {
                     for (String day : days) {
-                        new WeeklyScheduleNode(section, day, hour, null).save();
+                        new WeeklyScheduleNode(section, day, hour, new ArrayList<>()).save();
                     }
                 }
             }
