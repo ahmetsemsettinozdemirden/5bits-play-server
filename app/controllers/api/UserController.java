@@ -92,7 +92,6 @@ public class UserController extends Controller {
         try {
             userService.createUser(body.name, body.email, body.password, UserType.CONTENT_MANAGER);
             Events event = new Events("Assigned as a new content manager.", "Password: " + body.password);
-            event.save();
             mailer.sendEmail(Arrays.asList(body.email), event);
         } catch (ClientException e) {
             return badRequest(e.getMessage());
