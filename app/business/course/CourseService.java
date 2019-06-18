@@ -52,6 +52,7 @@ public class CourseService {
         return Course.finder.query()
                 .where()
                 .eq("deleted", false)
+                .orderBy("id")
                 .findList();
     }
 
@@ -60,6 +61,7 @@ public class CourseService {
                 .where()
                 .eq("status", true)
                 .eq("deleted", false)
+                .orderBy("id")
                 .findList();
     }
 

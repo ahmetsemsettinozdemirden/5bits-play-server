@@ -127,7 +127,7 @@ public class CourseController extends Controller {
         User user = request().attrs().get(JwtAttrs.VERIFIED_USER);
 
         if (!user.getType().equals(UserType.ADMIN)) {
-            return badRequest("Only admin can remove content manager");
+            return badRequest("Only admin can publish Weekly Schedule and Courses.");
         }
 
         try {

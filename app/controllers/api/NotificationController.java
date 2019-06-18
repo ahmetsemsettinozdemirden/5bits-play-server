@@ -2,11 +2,14 @@ package controllers.api;
 
 import business.exceptions.ClientException;
 import business.exceptions.ServerException;
+import business.jwt.JwtAttrs;
 import business.notification.NotificationService;
 import controllers.form.EmailListForm;
 import controllers.form.NotificationForm;
 import db.models.EmailList;
 import db.models.Events;
+import db.models.User;
+import db.models.UserType;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -113,6 +116,11 @@ public class NotificationController extends Controller {
     @BodyParser.Of(BodyParser.Json.class)
     public Result sendNotification() {
         Form<NotificationForm> form = formFactory.form(NotificationForm.class).bind(request().body().asJson());
+
+        User user = request().attrs().get(JwtAttrs.VERIFIED_USER);
+        if (!user.getType().equals(UserType.ADMIN)) {
+            return badRequest("Only admin can send notification.");
+        }
 
         if (form.hasErrors())
             return badRequest(form.errorsAsJson());
