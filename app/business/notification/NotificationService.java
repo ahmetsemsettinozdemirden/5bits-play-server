@@ -23,7 +23,7 @@ public class NotificationService {
     }
 
     public List<EmailList> getAllEmailLists() {
-        return EmailList.finder.all();
+        return EmailList.finder.query().orderBy("id").findList();
     }
 
     public EmailList getEmailList(Long id) {
